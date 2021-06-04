@@ -9,6 +9,7 @@ def thetaCalc(spins, weights):
 	return theta
 
 def LocalEnergy(spins, updatedSpins, weights):
+	numHid = 10
 
 	#ELoc = np.array([complex(0.,0.) for i in range(len(spins))])
 	ELoc_zz = [1. for i in range(5)]
@@ -22,7 +23,7 @@ def LocalEnergy(spins, updatedSpins, weights):
 	theta = thetaCalc(spins,weights)
 	for j in range(len(spins)):
 		for s in range(len(spins)):
-			for i in range(20):
+			for i in range(numHid):
 				numerx = np.cosh(theta[i] - 2* weights[i,(j+s)%5]*spins[(j+s)%5])
 				numery = 1.j * (-1)**((1+spins[(j+s)%5])/2)*numerx
 				denom = np.cosh(theta[i])
@@ -44,7 +45,7 @@ def LocalEnergy(spins, updatedSpins, weights):
 
 def O_Deriv(spins, weights):
 
-	numHid = 20
+	numHid = 10
 	numVis = 5
 
 	#print(O_W)

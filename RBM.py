@@ -4,11 +4,12 @@ import minresQLP2 as mqlp
 import StochasticReconfiguration
 import recenter as rc
 import random
+import scipy as sp
 
 
 gamma = 0.01
 n_vis = 5
-n_hid = 20
+n_hid = 10
 
 weights = np.array([[complex(random.uniform(0,1)*1e-2,random.uniform(0,1)*1e-2) for i in range(n_vis)] for j in range(n_hid)])
 print("init")
@@ -34,17 +35,21 @@ for i in range(100):
   #XFunImag = lambda x: ([np.matmul(np.conj(xCenter.imag.T),np.matmul(xCenter.imag,x))])
   XFunReal = lambda x: ([xCenter.real.T @ xCenter.real @ x])
   XFunImag = lambda x: ([np.conj(xCenter.imag.T) @ xCenter.imag @ x])
-  print(np.shape(S.real))
+  #print(np.shape(S.real))
   NuReal = mqlp.MinresQLP(np.array([S.real]),F.real,1e-6,100)
   #NuReal = mqlp.MinresQLP(XFunReal,F.real,1e-6,100)
   NuReal = NuReal[0]
+  #NuReal = sp.linalg.inv(S.real)
+  #NuReal = NuReal @ F
+  #NuImag = sp.linalg.inv(S.imag)
+  #NuImag = NuImag @ F
   NuImag = mqlp.MinresQLP(np.array([S.imag]),F.imag,1e-6,100)
-  #NuImag = mqlp.MinresQLP(XFunImag,F.imag,1e-6,100)
-  NuImag = NuImag[0]
+  NuImag = mqlp.MinresQLP(XFunImag,F.imag,1e-6,100)
+  #NuImag = NuImag[0]
   print("Iteration:", i)
-  print(NuReal)
+  #print(NuReal)
   #print(len(NuReal))
-  updatedParams = updatedParams - gamma*(NuReal[:][0] + NuImag[:][0])
+  updatedParams = updatedParams - gamma*(NuReal + NuImag)
 
   weights = np.array([updatedParams[i] for i in range(n_vis*n_hid)])
   weights = weights.reshape((n_hid,n_vis))
