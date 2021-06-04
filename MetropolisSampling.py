@@ -31,7 +31,7 @@ def ratioFunk(weights, spins, spinSite):
 
 def MetropolisHastings(steps, sampling, weights, spins):
 	''' Hilbert: Graph with the given connections'''
-	numHid = 10
+	numHid = 20
 	numVis = 5
 	totParam = numHid*numVis
 
@@ -77,7 +77,7 @@ def MetropolisHastings(steps, sampling, weights, spins):
 def HamiltonianExpectation(A, B, weights, spins):
 	EnergyA = 0.
 	EnergyB = 0.
-	hidSpins = 10
+	hidSpins = 20
 	theta = SR.thetaCalc(spins, weights)
 	for s in range(len(spins)):
 		for i in range(len(spins)):
